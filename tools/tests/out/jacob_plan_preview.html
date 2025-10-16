@@ -1,0 +1,45 @@
+<!-- partial excerpt from the file (full file should be copied into out/jacob_plan_preview.html in the new repo) -->
+        const quotes = window.__planner.quotes || [];
+        if(!quotes.length) return;
+        const baseIdx = quoteIndexForToday(quotes);
+        const sessionIdx = parseInt(sessionStorage.getItem('quote_offset') || '0',10) || 0;
+        const idx = (baseIdx + sessionIdx) % quotes.length;
+        document.getElementById('dailyQuote').textContent = quotes[idx];
+      }
+      document.getElementById('nextQuote').addEventListener('click', ()=>{
+        const cur = parseInt(sessionStorage.getItem('quote_offset') || '0',10) || 0;
+        sessionStorage.setItem('quote_offset', String(cur+1));
+        showDailyQuote();
+      });
+
+      // Print / Save
+      document.getElementById('printBtn').addEventListener('click', ()=>{
+        window.print();
+      });
+
+      // Theme toggle (light/dark simple)
+      const THEME_KEY = 'jacob_theme_v1';
+      function setDark(dark){
+        if(dark){
+          document.documentElement.style.setProperty('--bg','#0f1724');
+          document.documentElement.style.setProperty('--card','#081023');
+          document.documentElement.style.setProperty('--muted','#9ca3af');
+          document.documentElement.style.setProperty('--accent','#7c3aed');
+          document.documentElement.style.setProperty('--accent-2','#06b6d4');
+          document.body.style.color='#e6eef8';
+        }else{
+          document.documentElement.style.setProperty('--bg','#f6f8fb');
+          document.documentElement.style.setProperty('--card','#ffffff');
+          document.documentElement.style.setProperty('--muted','#6b7280');
+          document.documentElement.style.setProperty('--accent','#6d28d9');
+          document.documentElement.style.setProperty('--accent-2','#06b6d4');
+          document.body.style.color='';
+        }
+        localStorage.setItem(THEME_KEY, dark? 'dark':'light');
+      }
+      document.getElementById('themeToggle').addEventListener('click', ()=>{
+        const cur = localStorage.getItem(THEME_KEY) === 'dark';
+        setDark(!cur);
+      });
+      // restore theme
+      if(localStorage.getItem(THEME_KEY) === 'dark') setDark(true);
