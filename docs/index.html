@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jacob's Weekly Meal Planner & Calorie Tracker">
+  <title>Jacob's Meal Planner</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6d28d9">
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg">
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #6d28d9;
+      --accent-2: #06b6d4;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: #1f2937;
+      line-height: 1.6;
+      padding: 1rem;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: var(--accent-2);
+      color: white;
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card h3 {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e5e7eb;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .tab:hover {
+      color: var(--accent);
+    }
+    
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .meal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .meal-card {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .meal-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .meal-card h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .meal-card .day {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    
+    .meal-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .meal-info-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meal-info-item label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .meal-info-item span {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    
+    .grocery-list {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .grocery-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .grocery-section h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .grocery-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background 0.2s ease;
+    }
+    
+    .grocery-item:hover {
+      background: #f9fafb;
+    }
+    
+    .grocery-item input[type="checkbox"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+    }
+    
+    .grocery-item.checked {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    
+    .grocery-item-name {
+      flex: 1;
+      font-weight: 500;
+    }
+    
+    .grocery-item-quantity {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .calorie-log {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .calorie-log h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    
+    .log-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .log-entry:hover {
+      background: #f9fafb;
+    }
+    
+    .log-date {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .log-calories {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-header h2 {
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      color: var(--danger);
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 2rem;
+      background: #e5e7eb;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+    }
+    
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .meal-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+    
+    @media print {
+      .controls, .tabs, .btn {
+        display: none;
+      }
+      
+      body {
+        background: white;
+      }
+      
+      .meal-card, .grocery-list, .stat-card {
+        box-shadow: none;
+        border: 1px solid #e5e7eb;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💪 Jacob's Bulk Planner</h1>
+      <p>Weekly Meal Planning & Calorie Tracking</p>
+    </header>
+    
+    <div class="controls">
+      <button class="btn btn-primary" id="addMealBtn">➕ Add Meal</button>
+      <button class="btn btn-secondary" id="logCaloriesBtn">📊 Log Calories</button>
+      <button class="btn btn-success" id="generateGroceryBtn">🛒 Generate List</button>
+      <button class="btn btn-warning" id="resetBtn">🔄 Reset All</button>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Weekly Target</h3>
+        <div class="value" id="weeklyTarget">3500</div>
+        <small>calories/day</small>
+      </div>
+      <div class="stat-card">
+        <h3>Today's Intake</h3>
+        <div class="value" id="todayIntake">0</div>
+        <small>calories</small>
+      </div>
+      <div class="stat-card">
+        <h3>Meals Planned</h3>
+        <div class="value" id="mealsCount">0</div>
+        <small>this week</small>
+      </div>
+      <div class="stat-card">
+        <h3>Grocery Items</h3>
+        <div class="value" id="groceryCount">0</div>
+        <small>on list</small>
+      </div>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="meals">🍽️ Meal Plan</button>
+      <button class="tab" data-tab="grocery">🛒 Grocery List</button>
+      <button class="tab" data-tab="calories">📊 Calorie Log</button>
+    </div>
+    
+    <div id="mealsTab" class="tab-content active">
+      <div class="meal-grid" id="mealGrid">
+        <!-- Meals will be inserted here -->
+      </div>
+      <div class="empty-state" id="mealsEmpty" style="display: none;">
+        <div class="empty-state-icon">🍽️</div>
+        <p>No meals planned yet. Click "Add Meal" to get started!</p>
+      </div>
+    </div>
+    
+    <div id="groceryTab" class="tab-content">
+      <div class="grocery-list" id="groceryList">
+        <!-- Grocery items will be inserted here -->
+      </div>
+      <div class="empty-state" id="groceryEmpty" style="display: none;">
+        <div class="empty-state-icon">🛒</div>
+        <p>No grocery list yet. Add meals and click "Generate List"!</p>
+      </div>
+    </div>
+    
+    <div id="caloriesTab" class="tab-content">
+      <div class="calorie-log" id="calorieLog">
+        <h3>Daily Calorie Log</h3>
+        <div id="logEntries">
+          <!-- Log entries will be inserted here -->
+        </div>
+      </div>
+      <div class="empty-state" id="caloriesEmpty" style="display: none;">
+        <div class="empty-state-icon">📊</div>
+        <p>No calorie logs yet. Click "Log Calories" to start tracking!</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add Meal Modal -->
+  <div class="modal" id="addMealModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Meal</h2>
+        <button class="close-btn" onclick="closeModal('addMealModal')">&times;</button>
+      </div>
+      <form id="addMealForm">
+        <div class="form-group">
+          <label>Meal Name</label>
+          <input type="text" id="mealName" required placeholder="e.g., Chicken & Rice Bowl">
+        </div>
+        <div class="form-group">
+          <label>Day</label>
+          <select id="mealDay" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Meal Type</label>
+          <select id="mealType" required>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Snack">Snack</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Calories</label>
+          <input type="number" id="mealCalories" required placeholder="800">
+        </div>
+        <div class="form-group">
+          <label>Protein (g)</label>
+          <input type="number" id="mealProtein" required placeholder="50">
+        </div>
+        <div class="form-group">
+          <label>Carbs (g)</label>
+          <input type="number" id="mealCarbs" required placeholder="80">
+        </div>
+        <div class="form-group">
+          <label>Fats (g)</label>
+          <input type="number" id="mealFats" required placeholder="25">
+        </div>
+        <div class="form-group">
+          <label>Ingredients (one per line)</label>
+          <textarea id="mealIngredients" rows="4" placeholder="2 chicken breasts&#10;2 cups rice&#10;1 cup broccoli"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Add Meal</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Log Calories Modal -->
+  <div class="modal" id="logCaloriesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Log Calories</h2>
+        <button class="close-btn" onclick="closeModal('logCaloriesModal')">&times;</button>
+      </div>
+      <form id="logCaloriesForm">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="logDate" required>
+        </div>
+        <div class="form-group">
+          <label>Total Calories</label>
+          <input type="number" id="logCaloriesAmount" required placeholder="3500">
+        </div>
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <textarea id="logNotes" rows="3" placeholder="Felt great, good energy levels"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Log Entry</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Data storage
+    let meals = [];
+    let calorieLog = [];
+    let groceryList = [];
+    
+    // Load data from localStorage
+    function loadData() {
+      const savedMeals = localStorage.getItem('jacobMeals');
+      const savedLog = localStorage.getItem('jacobCalorieLog');
+      const savedGrocery = localStorage.getItem('jacobGroceryList');
+      
+      if (savedMeals) meals = JSON.parse(savedMeals);
+      if (savedLog) calorieLog = JSON.parse(savedLog);
+      if (savedGrocery) groceryList = JSON.parse(savedGrocery);
+    }
+    
+    // Save data to localStorage
+    function saveData() {
+      localStorage.setItem('jacobMeals', JSON.stringify(meals));
+      localStorage.setItem('jacobCalorieLog', JSON.stringify(calorieLog));
+      localStorage.setItem('jacobGroceryList', JSON.stringify(groceryList));
+    }
+    
+    // Initialize app
+    function init() {
+      loadData();
+      renderMeals();
+      renderGroceryList();
+      renderCalorieLog();
+      updateStats();
+      
+      // Set today's date for log
+      document.getElementById('logDate').valueAsDate = new Date();
+    }
+    
+    // Update statistics
+    function updateStats() {
+      document.getElementById('mealsCount').textContent = meals.length;
+      document.getElementById('groceryCount').textContent = groceryList.length;
+      
+      // Calculate today's intake
+      const today = new Date().toISOString().split('T')[0];
+      const todayLog = calorieLog.find(log => log.date === today);
+      document.getElementById('todayIntake').textContent = todayLog ? todayLog.calories : 0;
+    }
+    
+    // Render meals
+    function renderMeals() {
+      const grid = document.getElementById('mealGrid');
+      const empty = document.getElementById('mealsEmpty');
+      
+      if (meals.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+      
+      // Sort meals by day
+      const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const sortedMeals = [...meals].sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
+      
+      grid.innerHTML = sortedMeals.map((meal, index) => `
+        <div class="meal-card">
+          <div class="day">${meal.day} - ${meal.type}</div>
+          <h3>${meal.name}</h3>
+          <div class="meal-info">
+            <div class="meal-info-item">
+              <label>Calories</label>
+              <span>${meal.calories} kcal</span>
+            </div>
+            <div class="meal-info-item">
+              <label>Protein</label>
+              <span>${meal.protein}g</span>
+            </div>
+            <div class="meal-info-item">
+              <label>Carbs</label>
+              <span>${meal.carbs}g</span>
+            </div>
+            <div class="meal-info-item">
+              <label>Fats</label>
+              <span>${meal.fats}g</span>
+            </div>
+          </div>
+          ${meal.ingredients ? `
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+              <strong>Ingredients:</strong>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                ${meal.ingredients.split('\n').map(i => `<li>${i.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          ` : ''}
+          <button class="btn btn-danger" onclick="deleteMeal(${meals.indexOf(meal)})" 
+                  style="width: 100%; margin-top: 1rem; background: var(--danger);">
+            🗑️ Delete
+          </button>
+        </div>
+      `).join('');
+    }
+    
+    // Render grocery list
+    function renderGroceryList() {
+      const list = document.getElementById('groceryList');
+      const empty = document.getElementById('groceryEmpty');
+      
+      if (groceryList.length === 0) {
+        list.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      list.style.display = 'block';
+      empty.style.display = 'none';
+      
+      // Group by category
+      const grouped = groceryList.reduce((acc, item) => {
+        if (!acc[item.category]) acc[item.category] = [];
+        acc[item.category].push(item);
+        return acc;
+      }, {});
+      
+      list.innerHTML = Object.keys(grouped).map(category => `
+        <div class="grocery-section">
+          <h3>${category}</h3>
+          ${grouped[category].map((item, index) => `
+            <div class="grocery-item ${item.checked ? 'checked' : ''}" id="grocery-${groceryList.indexOf(item)}">
+              <input type="checkbox" ${item.checked ? 'checked' : ''} 
+                     onchange="toggleGroceryItem(${groceryList.indexOf(item)})">
+              <span class="grocery-item-name">${item.name}</span>
+              <span class="grocery-item-quantity">${item.quantity}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+    
+    // Render calorie log
+    function renderCalorieLog() {
+      const logDiv = document.getElementById('logEntries');
+      const empty = document.getElementById('caloriesEmpty');
+      
+      if (calorieLog.length === 0) {
+        document.getElementById('calorieLog').style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      document.getElementById('calorieLog').style.display = 'block';
+      empty.style.display = 'none';
+      
+      // Sort by date descending
+      const sortedLog = [...calorieLog].sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      logDiv.innerHTML = sortedLog.map((log, index) => `
+        <div class="log-entry">
+          <div>
+            <div class="log-date">${new Date(log.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+            ${log.notes ? `<small style="color: var(--muted);">${log.notes}</small>` : ''}
+          </div>
+          <div class="log-calories">${log.calories} kcal</div>
+        </div>
+      `).join('');
+    }
+    
+    // Add meal
+    document.getElementById('addMealForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const meal = {
+        name: document.getElementById('mealName').value,
+        day: document.getElementById('mealDay').value,
+        type: document.getElementById('mealType').value,
+        calories: parseInt(document.getElementById('mealCalories').value),
+        protein: parseInt(document.getElementById('mealProtein').value),
+        carbs: parseInt(document.getElementById('mealCarbs').value),
+        fats: parseInt(document.getElementById('mealFats').value),
+        ingredients: document.getElementById('mealIngredients').value
+      };
+      
+      meals.push(meal);
+      saveData();
+      renderMeals();
+      updateStats();
+      closeModal('addMealModal');
+      document.getElementById('addMealForm').reset();
+    });
+    
+    // Log calories
+    document.getElementById('logCaloriesForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const log = {
+        date: document.getElementById('logDate').value,
+        calories: parseInt(document.getElementById('logCaloriesAmount').value),
+        notes: document.getElementById('logNotes').value
+      };
+      
+      // Remove existing log for same date
+      calorieLog = calorieLog.filter(l => l.date !== log.date);
+      calorieLog.push(log);
+      
+      saveData();
+      renderCalorieLog();
+      updateStats();
+      closeModal('logCaloriesModal');
+      document.getElementById('logCaloriesForm').reset();
+      document.getElementById('logDate').valueAsDate = new Date();
+    });
+    
+    // Generate grocery list
+    document.getElementById('generateGroceryBtn').addEventListener('click', () => {
+      if (meals.length === 0) {
+        alert('Add some meals first!');
+        return;
+      }
+      
+      groceryList = [];
+      const ingredientMap = {};
+      
+      meals.forEach(meal => {
+        if (!meal.ingredients) return;
+        
+        meal.ingredients.split('\n').forEach(ing => {
+          const trimmed = ing.trim();
+          if (!trimmed) return;
+          
+          // Simple parsing of quantity and item
+          const match = trimmed.match(/^([\d./]+\s*\w*)\s+(.+)$/);
+          if (match) {
+            const [, quantity, name] = match;
+            const key = name.toLowerCase();
+            
+            if (ingredientMap[key]) {
+              ingredientMap[key].quantity += ', ' + quantity;
+            } else {
+              ingredientMap[key] = { name, quantity, category: guessCategory(name) };
+            }
+          } else {
+            const key = trimmed.toLowerCase();
+            if (!ingredientMap[key]) {
+              ingredientMap[key] = { name: trimmed, quantity: '1x', category: guessCategory(trimmed) };
+            }
+          }
+        });
+      });
+      
+      groceryList = Object.values(ingredientMap).map(item => ({ ...item, checked: false }));
+      saveData();
+      renderGroceryList();
+      updateStats();
+      
+      // Switch to grocery tab
+      document.querySelector('[data-tab="grocery"]').click();
+    });
+    
+    // Guess category for grocery item
+    function guessCategory(name) {
+      const lower = name.toLowerCase();
+      
+      if (lower.includes('chicken') || lower.includes('beef') || lower.includes('pork') || 
+          lower.includes('fish') || lower.includes('turkey') || lower.includes('meat')) {
+        return 'Proteins';
+      }
+      if (lower.includes('rice') || lower.includes('pasta') || lower.includes('bread') || 
+          lower.includes('oat') || lower.includes('cereal')) {
+        return 'Grains';
+      }
+      if (lower.includes('milk') || lower.includes('cheese') || lower.includes('yogurt') || 
+          lower.includes('butter')) {
+        return 'Dairy';
+      }
+      if (lower.includes('apple') || lower.includes('banana') || lower.includes('orange') || 
+          lower.includes('berry') || lower.includes('fruit')) {
+        return 'Fruits';
+      }
+      if (lower.includes('broccoli') || lower.includes('carrot') || lower.includes('lettuce') || 
+          lower.includes('tomato') || lower.includes('vegetable') || lower.includes('spinach')) {
+        return 'Vegetables';
+      }
+      
+      return 'Other';
+    }
+    
+    // Toggle grocery item
+    function toggleGroceryItem(index) {
+      groceryList[index].checked = !groceryList[index].checked;
+      saveData();
+      renderGroceryList();
+    }
+    
+    // Delete meal
+    function deleteMeal(index) {
+      if (confirm('Are you sure you want to delete this meal?')) {
+        meals.splice(index, 1);
+        saveData();
+        renderMeals();
+        updateStats();
+      }
+    }
+    
+    // Reset all data
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset ALL data? This cannot be undone!')) {
+        meals = [];
+        calorieLog = [];
+        groceryList = [];
+        saveData();
+        renderMeals();
+        renderGroceryList();
+        renderCalorieLog();
+        updateStats();
+      }
+    });
+    
+    // Modal functions
+    document.getElementById('addMealBtn').addEventListener('click', () => {
+      document.getElementById('addMealModal').classList.add('active');
+    });
+    
+    document.getElementById('logCaloriesBtn').addEventListener('click', () => {
+      document.getElementById('logCaloriesModal').classList.add('active');
+    });
+    
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+    
+    // Close modal on background click
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal(modal.id);
+        }
+      });
+    });
+    
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(tabName + 'Tab').classList.add('active');
+      });
+    });
+    
+    // Initialize on load
+    init();
+  </script>
+</body>
+</html>
