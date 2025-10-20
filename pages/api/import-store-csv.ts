@@ -24,22 +24,37 @@ function parsePrice(priceStr: string): number {
 
 function parseCSV(csvContent: string): CSVRow[] {
   const lines = csvContent.trim().split('\n');
-  const headers = lines[0].split(',');
   const rows: CSVRow[] = [];
 
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
-    const values = line.split(',');
+    // Simple CSV parsing - handle quoted fields
+    const values: string[] = [];
+    let current = '';
+    let inQuotes = false;
     
-    if (values.length === headers.length) {
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current.trim());
+    
+    if (values.length >= 7) {
       rows.push({
-        sku: values[0]?.trim() || '',
-        store: values[1]?.trim() || '',
-        category: values[2]?.trim() || '',
-        item_name: values[3]?.trim() || '',
-        unit_size: values[4]?.trim() || '',
-        approx_price: values[5]?.trim() || '',
-        notes: values[6]?.trim() || ''
+        sku: values[0] || '',
+        store: values[1] || '',
+        category: values[2] || '',
+        item_name: values[3] || '',
+        unit_size: values[4] || '',
+        approx_price: values[5] || '',
+        notes: values[6] || ''
       });
     }
   }
@@ -149,19 +164,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Parse price
         const price = parsePrice(row.approx_price);
 
-        // Insert or update store_product
-        const { error: productError } = await supabase
+        // Check if store_product already exists
+        const { data: existingProduct } = await supabase
           .from('store_products')
-          .upsert({
-            ingredient_id: ingredientId,
-            store_id: storeId,
-            product_name: ingredientName,
-            brand: row.category, // Using category as brand for now
-            price_estimate: price
-          }, {
-            onConflict: 'ingredient_id,store_id',
-            ignoreDuplicates: false
-          });
+          .select('id')
+          .eq('ingredient_id', ingredientId)
+          .eq('store_id', storeId)
+          .single();
+
+        let productError = null;
+        
+        if (existingProduct) {
+          // Update existing product
+          const { error } = await supabase
+            .from('store_products')
+            .update({
+              product_name: ingredientName,
+              brand: row.category,
+              price_estimate: price
+            })
+            .eq('id', existingProduct.id);
+          productError = error;
+        } else {
+          // Insert new product
+          const { error } = await supabase
+            .from('store_products')
+            .insert({
+              ingredient_id: ingredientId,
+              store_id: storeId,
+              product_name: ingredientName,
+              brand: row.category,
+              price_estimate: price
+            });
+          productError = error;
+        }
 
         if (productError) {
           errors.push(`Failed to import ${row.sku} (${ingredientName}): ${productError.message}`);
