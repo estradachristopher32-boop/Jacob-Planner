@@ -1,0 +1,65 @@
+{
+  "weeklyTarget": 3500,
+  "goal": "bulk",
+  "stores": ["Costco", "HEB", "Walmart"],
+  "sampleMeals": [
+    {
+      "name": "Chicken & Rice Power Bowl",
+      "day": "Monday",
+      "type": "Lunch",
+      "calories": 850,
+      "protein": 55,
+      "carbs": 95,
+      "fats": 18,
+      "ingredients": "2 chicken breasts\n2 cups white rice\n1 cup broccoli\n1 tbsp olive oil"
+    },
+    {
+      "name": "Protein Oatmeal",
+      "day": "Monday",
+      "type": "Breakfast",
+      "calories": 550,
+      "protein": 40,
+      "carbs": 65,
+      "fats": 12,
+      "ingredients": "1 cup oats\n1 scoop protein powder\n1 banana\n2 tbsp peanut butter\n1 cup milk"
+    },
+    {
+      "name": "Salmon & Sweet Potato",
+      "day": "Tuesday",
+      "type": "Dinner",
+      "calories": 780,
+      "protein": 48,
+      "carbs": 72,
+      "fats": 28,
+      "ingredients": "8 oz salmon\n2 medium sweet potatoes\n1 cup green beans\n1 tbsp butter"
+    },
+    {
+      "name": "Ground Beef Burrito Bowl",
+      "day": "Wednesday",
+      "type": "Lunch",
+      "calories": 920,
+      "protein": 58,
+      "carbs": 88,
+      "fats": 32,
+      "ingredients": "1 lb ground beef\n2 cups brown rice\n1/2 cup black beans\n1/4 cup cheese\n1 avocado\nSalsa"
+    },
+    {
+      "name": "Protein Shake",
+      "day": "Daily",
+      "type": "Snack",
+      "calories": 400,
+      "protein": 50,
+      "carbs": 35,
+      "fats": 8,
+      "ingredients": "2 scoops protein powder\n1 banana\n2 cups milk\n1 tbsp honey"
+    }
+  ],
+  "tips": [
+    "Aim for 1g of protein per pound of body weight",
+    "Eat in a 300-500 calorie surplus for clean bulking",
+    "Meal prep on Sundays to stay consistent",
+    "Track your weight weekly, not daily",
+    "Stay hydrated - aim for 1 gallon of water per day",
+    "Get 7-9 hours of sleep for muscle recovery"
+  ]
+}
