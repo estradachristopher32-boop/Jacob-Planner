@@ -1,0 +1,51 @@
+sku,store,category,item_name,unit_size,approx_price,notes
+HEB-001,H-E-B,Meat,Chicken Breast Boneless Skinless,2 lb,$4.99/lb (≈$9.98),Lean protein staple
+HEB-002,H-E-B,Meat,Lean Ground Beef 90/10,3 lb,$15.00 est.,High-protein red meat for bulking
+HEB-003,H-E-B,Meat,Salmon Fillet,1 lb,$16.77 est.,Healthy fats + protein
+HEB-004,H-E-B,Dairy,Greek Yogurt Plain,32 oz,$4.00 est.,High-protein snack
+HEB-005,H-E-B,Dairy,Eggs Large,18 ct,$3.50 est.,Macro-friendly staple
+HEB-006,H-E-B,Produce,Broccoli Florets,2 lb,$4.00 est.,Vegetable staple
+HEB-007,H-E-B,Produce,Sweet Potatoes,5 lb,$5.00 est.,Carb source
+HEB-008,H-E-B,Produce,Spinach Baby Leaf,10 oz,$3.00 est.,Leafy green micronutrients
+HEB-009,H-E-B,Snack,Raw Almonds,12 oz,$8.00 est.,Healthy fats + snack
+HEB-010,H-E-B,Snack,Trail Mix,10 oz,$7.00 est.,Portable snack
+HEB-011,H-E-B,Supplement,Protein Powder (Whey Isolate),2 lb,$29.00 est.,Macro boost (check brand)
+HEB-012,H-E-B,Produce,Red Bell Pepper,each,$1.48 ea,Colorful produce for meals
+HEB-013,H-E-B,Produce,Fresh Roma Tomato,per lb,$0.65/lb,Make salads/stir-fry
+HEB-014,H-E-B,Dairy,Cottage Cheese,24 oz,$2.50 est.,High-protein low-fat
+HEB-015,H-E-B,Pantry,Oats Rolled,42 oz,$4.50 est.,Carb + fiber base
+HEB-016,H-E-B,Pantry,Quinoa,12 oz,$4.00 est.,Alternate whole-grain carb
+HEB-017,H-E-B,Pantry,Black Beans,15 oz can,$1.00 est.,Vegetarian protein + carbs
+HEB-018,H-E-B,Snack,Greek Yogurt Cups (Single Serve),4-pack,$3.50 est.,On-the-go protein snack
+HEB-019,Costco,Meat,Chicken Breasts Boneless Skinless (Kirkland),6 lb,$18.99 for 6.5 lb,Bulk size good for week
+HEB-020,Costco,Meat,Lean Ground Turkey,5 lb,$14.00 est.,Lean protein alternative
+HEB-021,Costco,Meat,Wild Caught Salmon Fillets,4 lb,$35.00 est.,Healthy fats bulk
+HEB-022,Costco,Dairy,Greek Yogurt Plain,48 oz,$6.00 est.,Large pack
+HEB-023,Costco,Dairy,Eggs Large,24 ct,$4.50 est.,Value large pack
+HEB-024,Costco,Produce,Broccoli Florets,4 lb,$6.00 est.,Bulk veggie
+HEB-025,Costco,Pantry,Quinoa,4.5 lb,$10.00 est.,Bulk whole-grain carb
+HEB-026,Costco,Snack,Raw Almonds,3 lb,$18.00 est.,Bulk nuts
+HEB-027,Costco,Snack,Protein Bars,24 ct,$22.00 est.,Convenient bulking snack
+HEB-028,Costco,Supplement,Creatine Monohydrate,1 kg,$25.00 est.,Support strength gains
+HEB-029,Costco,Pantry,Oats Rolled,10 lb,$15.00 est.,Huge cereal base
+HEB-030,Costco,Pantry,Black Beans 6-pack,15 oz cans,$5.00 est.,Economy vegetarian protein
+HEB-031,Costco,Produce,Fresh Mixed Greens,1 lb,$4.00 est.,Leafy greens bulk
+HEB-032,H-E-B or Costco,Snack,Rice Cakes,14 oz,$3.50 est.,Low calorie snack option
+HEB-033,H-E-B or Costco,Snack,Natural Peanut Butter,28 oz,$7.00 est.,Healthy fats + protein
+HEB-034,H-E-B or Costco,Produce,Avocados,each,$1.50 est.,Healthy fat & micronutrients
+HEB-035,H-E-B or Costco,Produce,Frozen Mixed Berries,48 oz,$8.00 est.,Frozen fruit/ carb mix
+HEB-036,H-E-B,Produce,Bananas,per lb,$0.59/lb est.,Cheap carb + potassium
+HEB-037,H-E-B,Pantry,Whole Wheat Bread,24 oz,$3.00 est.,Complex carb sandwich base
+HEB-038,H-E-B,Dairy,Milk Skim,1 gal,$2.50 est.,Protein + calcium
+HEB-039,Costco,Produce,Organic Spinach,2 lb,$5.00 est.,Bulk leafy greens
+HEB-040,Costco,Dairy,Greek Yogurt Flavored,48 oz,$7.00 est.,Flavor option
+HEB-041,Costco,Snack,Beef Jerky,12 oz,$15.00 est.,Convenience high protein
+HEB-042,H-E-B,Pantry,Brown Rice,32 oz,$3.00 est.,Complex carb base
+HEB-043,H-E-B,Produce,Brussels Sprouts,1 lb,$2.50 est.,Vegetable variety
+HEB-044,Costco,Produce,Sweet Potatoes,10 lb,$6.00 est.,Bulk carb source
+HEB-045,Costco,Pantry,Chickpeas,4 lb,$4.50 est.,Vegetarian protein + fiber
+HEB-046,H-E-B,Snack,Low-Fat String Cheese,12 ct,$4.00 est.,Dairy snack
+HEB-047,H-E-B,Dairy,Greek Yogurt Vanilla,32 oz,$4.50 est.,Flavor option
+HEB-048,H-E-B,Meat,Turkey Breast Slices (Deli),1 lb,$7.00 est.,Lean deli protein
+HEB-049,Costco,Snack,Whole Grain Crackers,30 oz,$8.00 est.,Carb + fiber snack
+HEB-050,Costco,Produce,Blueberries,4 lb,$9.00 est.,Frozen bulk fruit
